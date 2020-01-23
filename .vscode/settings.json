@@ -1,3 +1,9 @@
 {
-    "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "htmlhint.options": {
+    "attr-lowercase": ["[(ngModel)]", "(ngSubmit)", "*ngFor", "ngIf"],
+    "doctype-first": false,
+    "attr-value-double-quotes": true
+  },
+  "tslint.configFile": "tslint.json"
 }
