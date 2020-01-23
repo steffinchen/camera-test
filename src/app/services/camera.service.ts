@@ -16,9 +16,9 @@ export class CameraService {
     facingMode: FacingMode,
     streamWidth?: number,
     streamHeight?: number,
-    labelFilter?: string
+    deviceId?: string
   ) => {
-    let constraints: any = await this.getConstraints(facingMode, streamWidth, streamHeight, labelFilter);
+    let constraints: any = await this.getConstraints(facingMode, streamWidth, streamHeight, deviceId);
 
     this.deviceInformation.cameraLog.push('using constraints: ' + JSON.stringify(constraints));
 
@@ -58,20 +58,16 @@ export class CameraService {
     facingMode: FacingMode,
     streamWidth?: number,
     streamHeight?: number,
-    labelFilter?: string
+    deviceId?: string
   ) => {
     const constraints: any = {
-      video: { facingMode, ...(streamWidth && { width: streamWidth }), ...(streamHeight && { height: streamHeight }) }
-    };
-
-    if (labelFilter) {
-      const allAvailableDevices = await this.deviceInformation.getAvailbleMediaDevices();
-      const device = allAvailableDevices.filter(d => d.kind === 'videoinput').find(d => d.label === labelFilter);
-      console.log('TCL: CameraService -> constructor -> device', device);
-      if (device) {
-        constraints.video.deviceId = device.deviceId;
+      video: {
+        facingMode,
+        ...(streamWidth && { width: streamWidth }),
+        ...(streamHeight && { height: streamHeight }),
+        ...(deviceId && { deviceId })
       }
-    }
+    };
 
     return constraints;
   };
