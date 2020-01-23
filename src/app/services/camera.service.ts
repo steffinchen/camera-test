@@ -61,9 +61,7 @@ export class CameraService {
     labelFilter?: string
   ) => {
     const constraints: any = {
-      video: { facingMode },
-      ...(streamWidth && { width: streamWidth }),
-      ...(streamHeight && { height: streamHeight })
+      video: { facingMode, ...(streamWidth && { width: streamWidth }), ...(streamHeight && { height: streamHeight }) }
     };
 
     if (labelFilter) {
