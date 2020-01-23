@@ -9,8 +9,20 @@ export class CameraService {
 
   constructor(private deviceInformation: DeviceInformationService) {}
 
-  public startCamera = async (facingMode: 'user' | 'environment') => {
-    const constraints: any = await this.getConstraints(facingMode);
+  public startCamera = async (
+    facingMode: 'user' | 'environment',
+    streamWidth?: number,
+    streamHeight?: number
+  ) => {
+    const constraints: any = await this.getConstraints(
+      facingMode,
+      streamWidth,
+      streamHeight
+    );
+    console.log(
+      'TCL: CameraService -> constructor -> constraints',
+      constraints
+    );
 
     return window.navigator.mediaDevices
       .getUserMedia(constraints)
@@ -35,24 +47,18 @@ export class CameraService {
   public stopCamera = (stream: any) =>
     stream.getTracks().map((track: any) => track.stop && track.stop());
 
-  private getConstraints = async (facingMode: 'user' | 'environment') => {
+  private getConstraints = async (
+    facingMode: 'user' | 'environment',
+    streamWidth?: number,
+    streamHeight?: number
+  ) => {
     const constraints: any = {
-      video: { width: 1920, height: 1920, facingMode }
+      video: { facingMode },
+      ...(streamWidth && { width: streamWidth }),
+      ...(streamHeight && { height: streamHeight })
     };
 
-    // On android, except for the galaxy S8 (I know this also matches other galaxy phones, its fine) we request a higher resolution stream
-    if (
-      this.deviceInformation.isAndroid &&
-      navigator.userAgent.indexOf('; SM-G') === -1
-    ) {
-      constraints.video.width = 2560;
-      constraints.video.height = 2560;
-    }
-
-    // For user camera we just want any user facing camera. We dont care about the resolution
-    if (facingMode === 'user') {
-      constraints.video = { facingMode };
-    } else {
+    if (facingMode === 'environment') {
       const allAvailableDevices = await navigator.mediaDevices.enumerateDevices();
       const device = allAvailableDevices
         .map(d => {

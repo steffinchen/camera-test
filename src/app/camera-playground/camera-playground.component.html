@@ -1,17 +1,49 @@
 <div>
-  <div></div>
+  <div>
+    <form #cameraForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="requestedStreamWidth">Stream Width</label>
+        <input
+          type="number"
+          [(ngModel)]="model.requestedStreamWidth"
+          name="requestedStreamWidth"
+        />
+      </div>
+      <div class="form-group">
+        <label for="requestedStreamHeight">Stream Height</label>
+        <input
+          type="number"
+          [(ngModel)]="model.requestedStreamHeight"
+          name="requestedStreamHeight"
+        />
+      </div>
+      <div class="form-group">
+        <label for="facingMode">Facing Mode</label>
+        <select [(ngModel)]="model.facingMode" name="facingMode">
+          <option
+            *ngFor="let enum of FacingModeEnum | keyvalue; let i = index"
+            [value]="enum.value"
+            [attr.selected]="i == 0 ? true : null"
+            >{{ enum.value }}</option
+          >
+        </select>
+      </div>
+      <button type="submit">Go</button>
+    </form>
+  </div>
   <video
     #video
     webkit-playsinline
     autoplay
     playsinline
     muted
-    controls
     crossorigin="anonymous"
   ></video>
   <div>
     <h3>Stream details:</h3>
-    <p>Video Width: {{ videoWidth }}</p>
-    <p>Video Height: {{ videoHeight }}</p>
+    <p>Requested stream width: {{ model.requestedStreamWidth }}</p>
+    <p>Requested stream height: {{ model.requestedStreamHeight }}</p>
+    <p>Actual stream width: {{ videoWidth }}</p>
+    <p>Actual stream height: {{ videoHeight }}</p>
   </div>
 </div>

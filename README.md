@@ -1,14 +1,12 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/55516d15-da0d-45c5-9d94-061b5242c003/deploy-status)](https://app.netlify.com/sites/loving-bartik-4994c7/deploys)
+
 # CameraTest
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
+Simple app to test a device's camera. It lets the user request a custom resolution, which camera to access (e.g. front or back) and displays some information, e.g. which resolutio the acutal stream is.
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
 

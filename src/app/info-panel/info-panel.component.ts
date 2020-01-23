@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DeviceInformationService } from 'src/services/device-information.service';
+import { DeviceInformationService } from 'src/app/services/device-information.service';
 
 @Component({
   selector: 'app-info-panel',
