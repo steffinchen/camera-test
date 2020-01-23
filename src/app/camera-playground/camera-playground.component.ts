@@ -41,6 +41,9 @@ export class CameraPlaygroundComponent implements OnInit, OnDestroy {
 
   async onSubmit() {
     try {
+      if (this.camera.activeEnvironmentStream) {
+        this.camera.stopCamera(this.stream);
+      }
       this.stream = await this.camera.startCamera(
         this.model.facingMode,
         this.model.requestedStreamWidth,
