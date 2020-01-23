@@ -16,7 +16,7 @@ export class InfoPanelComponent implements OnInit {
       await this.deviceInformation.getAvailbleMediaDevices()
     ).map(
       d =>
-        'kind: ' + d.kind + ', deviceId: ' + d.deviceId + ', label :' + d.label
+        'kind: ' + d.kind + ', deviceId: ' + d.deviceId + ', label: ' + d.label
     );
   }
 }

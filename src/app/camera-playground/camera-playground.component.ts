@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ElementRef,
-  ViewChild,
-  OnDestroy
-} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { CameraService } from 'src/app/services/camera.service';
 import { FacingMode } from 'src/app/facing-mode.model';
 
@@ -25,7 +19,8 @@ export class CameraPlaygroundComponent implements OnInit, OnDestroy {
   model = {
     requestedStreamWidth: 1920,
     requestedStreamHeight: 1920,
-    facingMode: FacingMode.Environment
+    facingMode: FacingMode.Environment,
+    labelFilter: ''
   };
 
   @ViewChild('video', { static: true }) video: ElementRef;
@@ -49,7 +44,8 @@ export class CameraPlaygroundComponent implements OnInit, OnDestroy {
       this.stream = await this.camera.startCamera(
         this.model.facingMode,
         this.model.requestedStreamWidth,
-        this.model.requestedStreamHeight
+        this.model.requestedStreamHeight,
+        this.model.labelFilter
       );
       this.camera.activeEnvironmentStream = this.stream;
       this.video.nativeElement.srcObject = this.stream;

@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import _ from 'lodash';
+
 import { DeviceInformationService } from './device-information.service';
 import { FacingMode } from '../facing-mode.model';
 
@@ -13,53 +15,50 @@ export class CameraService {
   public startCamera = async (
     facingMode: FacingMode,
     streamWidth?: number,
-    streamHeight?: number
+    streamHeight?: number,
+    labelFilter?: string
   ) => {
-    let constraints: any = await this.getConstraints(
-      facingMode,
-      streamWidth,
-      streamHeight
-    );
+    let constraints: any = await this.getConstraints(facingMode, streamWidth, streamHeight, labelFilter);
 
-    this.deviceInformation.cameraLog.push(
-      'using constraints: ' + JSON.stringify(constraints)
-    );
+    this.deviceInformation.cameraLog.push('using constraints: ' + JSON.stringify(constraints));
 
     return window.navigator.mediaDevices
       .getUserMedia(constraints)
       .catch(err => {
-        this.deviceInformation.cameraLog.push(
-          'default constraints failed, falling back to any resolution but still specifying facing mode. ' +
-            err
-        );
+        this.deviceInformation.cameraLog.push('specified constraints failed, droping device id. ' + err);
 
-        constraints = {
-          video: { facingMode }
-        };
-        this.deviceInformation.cameraLog.push(
-          'using constraints: ' + JSON.stringify(constraints)
-        );
+        constraints = _.omit(constraints, 'video.deviceId');
+        this.deviceInformation.cameraLog.push('using constraints: ' + JSON.stringify(constraints));
         return window.navigator.mediaDevices.getUserMedia(constraints);
       })
       .catch(err => {
-        this.deviceInformation.cameraLog.push(
-          'facing mode not available, falling back to any camera. ' + err
-        );
-        constraints = { video: {} };
-        this.deviceInformation.cameraLog.push(
-          'using constraints: ' + JSON.stringify(constraints)
-        );
+        this.deviceInformation.cameraLog.push('specified constraints failed, droping resolution ' + err);
+
+        constraints = _.omit(constraints, ['video.width', 'video.height']);
+        this.deviceInformation.cameraLog.push('using constraints: ' + JSON.stringify(constraints));
         return window.navigator.mediaDevices.getUserMedia(constraints);
+      })
+      .catch(err => {
+        this.deviceInformation.cameraLog.push('facing mode not available, falling back to any camera. ' + err);
+        constraints = { video: {} };
+        this.deviceInformation.cameraLog.push('using constraints: ' + JSON.stringify(constraints));
+        return window.navigator.mediaDevices.getUserMedia(constraints);
+      })
+      .catch(err => {
+        this.deviceInformation.cameraLog.push('could not start camera, giving up ' + err);
       });
   };
 
-  public stopCamera = (stream: any) =>
+  public stopCamera = (stream: any) => {
+    this.deviceInformation.cameraLog = [];
     stream.getTracks().map((track: any) => track.stop && track.stop());
+  };
 
   private getConstraints = async (
     facingMode: FacingMode,
     streamWidth?: number,
-    streamHeight?: number
+    streamHeight?: number,
+    labelFilter?: string
   ) => {
     const constraints: any = {
       video: { facingMode },
@@ -67,14 +66,10 @@ export class CameraService {
       ...(streamHeight && { height: streamHeight })
     };
 
-    if (facingMode === 'environment') {
+    if (labelFilter) {
       const allAvailableDevices = await this.deviceInformation.getAvailbleMediaDevices();
-      const device = allAvailableDevices
-        .filter(d => d.kind === 'videoinput')
-        // getting the correct back camera on p20 pro/p30 pro
-        .find(d => d.label === 'camera2 2, facing back');
-
-      // applying hard coded device id to constraints request
+      const device = allAvailableDevices.filter(d => d.kind === 'videoinput').find(d => d.label === labelFilter);
+      console.log('TCL: CameraService -> constructor -> device', device);
       if (device) {
         constraints.video.deviceId = device.deviceId;
       }
