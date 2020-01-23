@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DeviceInformationService } from './device-information.service';
+import { FacingMode } from '../facing-mode.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,37 +11,45 @@ export class CameraService {
   constructor(private deviceInformation: DeviceInformationService) {}
 
   public startCamera = async (
-    facingMode: 'user' | 'environment',
+    facingMode: FacingMode,
     streamWidth?: number,
     streamHeight?: number
   ) => {
-    const constraints: any = await this.getConstraints(
+    let constraints: any = await this.getConstraints(
       facingMode,
       streamWidth,
       streamHeight
     );
-    console.log(
-      'TCL: CameraService -> constructor -> constraints',
-      constraints
+
+    this.deviceInformation.cameraLog.push(
+      'using constraints: ' + JSON.stringify(constraints)
     );
 
     return window.navigator.mediaDevices
       .getUserMedia(constraints)
       .catch(err => {
-        console.warn(
-          'default constraints failed, falling back to any resolution but still specifying facing mode',
-          err
+        this.deviceInformation.cameraLog.push(
+          'default constraints failed, falling back to any resolution but still specifying facing mode. ' +
+            err
         );
-        return window.navigator.mediaDevices.getUserMedia({
+
+        constraints = {
           video: { facingMode }
-        });
+        };
+        this.deviceInformation.cameraLog.push(
+          'using constraints: ' + JSON.stringify(constraints)
+        );
+        return window.navigator.mediaDevices.getUserMedia(constraints);
       })
       .catch(err => {
-        console.warn(
-          'facing mode not available, falling back to any camera',
-          err
+        this.deviceInformation.cameraLog.push(
+          'facing mode not available, falling back to any camera. ' + err
         );
-        return window.navigator.mediaDevices.getUserMedia({ video: {} });
+        constraints = { video: {} };
+        this.deviceInformation.cameraLog.push(
+          'using constraints: ' + JSON.stringify(constraints)
+        );
+        return window.navigator.mediaDevices.getUserMedia(constraints);
       });
   };
 
@@ -48,7 +57,7 @@ export class CameraService {
     stream.getTracks().map((track: any) => track.stop && track.stop());
 
   private getConstraints = async (
-    facingMode: 'user' | 'environment',
+    facingMode: FacingMode,
     streamWidth?: number,
     streamHeight?: number
   ) => {
@@ -59,7 +68,7 @@ export class CameraService {
     };
 
     if (facingMode === 'environment') {
-      const allAvailableDevices = await navigator.mediaDevices.enumerateDevices();
+      const allAvailableDevices = await this.deviceInformation.getAvailbleMediaDevices();
       const device = allAvailableDevices
         .map(d => {
           console.log('device: ', d);

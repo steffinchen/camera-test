@@ -41,9 +41,11 @@
   ></video>
   <div>
     <h3>Stream details:</h3>
-    <p>Requested stream width: {{ model.requestedStreamWidth }}</p>
-    <p>Requested stream height: {{ model.requestedStreamHeight }}</p>
-    <p>Actual stream width: {{ videoWidth }}</p>
-    <p>Actual stream height: {{ videoHeight }}</p>
+    <ul>
+      <li>Requested stream width: {{ model.requestedStreamWidth }}</li>
+      <li>Requested stream height: {{ model.requestedStreamHeight }}</li>
+      <li>Actual stream width: {{ videoWidth }}</li>
+      <li>Actual stream height: {{ videoHeight }}</li>
+    </ul>
   </div>
 </div>

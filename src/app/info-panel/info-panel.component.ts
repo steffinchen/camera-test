@@ -7,7 +7,16 @@ import { DeviceInformationService } from 'src/app/services/device-information.se
   styleUrls: ['./info-panel.component.scss']
 })
 export class InfoPanelComponent implements OnInit {
+  availableMediaDeviceInfo = [];
+
   constructor(public deviceInformation: DeviceInformationService) {}
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.availableMediaDeviceInfo = (
+      await this.deviceInformation.getAvailbleMediaDevices()
+    ).map(
+      d =>
+        'kind: ' + d.kind + ', deviceId: ' + d.deviceId + ', label :' + d.label
+    );
+  }
 }

@@ -18,5 +18,16 @@ export class DeviceInformationService {
       navigator.userAgent
     );
 
+  cameraLog = [];
+
+  private availableDevices: MediaDeviceInfo[];
+
   constructor() {}
+
+  async getAvailbleMediaDevices() {
+    if (!this.availableDevices) {
+      this.availableDevices = await navigator.mediaDevices.enumerateDevices();
+    }
+    return this.availableDevices;
+  }
 }

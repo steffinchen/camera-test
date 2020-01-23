@@ -41,13 +41,11 @@ export class CameraPlaygroundComponent implements OnInit, OnDestroy {
 
   async onSubmit() {
     try {
-      this.stream =
-        this.camera.activeEnvironmentStream ||
-        (await this.camera.startCamera(
-          'environment',
-          this.model.requestedStreamWidth,
-          this.model.requestedStreamHeight
-        ));
+      this.stream = await this.camera.startCamera(
+        this.model.facingMode,
+        this.model.requestedStreamWidth,
+        this.model.requestedStreamHeight
+      );
       this.camera.activeEnvironmentStream = this.stream;
       this.video.nativeElement.srcObject = this.stream;
     } catch (err) {

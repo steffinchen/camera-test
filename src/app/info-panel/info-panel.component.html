@@ -1,7 +1,21 @@
 <div>
-  <h3>Device information:</h3>
-  <p>User agent: {{ deviceInformation.userAgent }}</p>
-  <p>is mobile: {{ deviceInformation.isMobile }}</p>
-  <p>is Android: {{ deviceInformation.isAndroid }}</p>
-  <p>is iOS: {{ deviceInformation.isIOS }}</p>
+  <h2>Device information:</h2>
+  <ul>
+    <li>User agent: {{ deviceInformation.userAgent }}</li>
+    <li>is mobile: {{ deviceInformation.isMobile }}</li>
+    <li>is Android: {{ deviceInformation.isAndroid }}</li>
+    <li>is iOS: {{ deviceInformation.isIOS }}</li>
+  </ul>
+  <div>
+    <h3>Available media devices:</h3>
+    <ul>
+      <li *ngFor="let d of availableMediaDeviceInfo">
+        {{ d }}
+      </li>
+    </ul>
+  </div>
+  <div>
+    <h2>Camera logs:</h2>
+    <p *ngFor="let entry of deviceInformation.cameraLog">{{ entry }}</p>
+  </div>
 </div>
