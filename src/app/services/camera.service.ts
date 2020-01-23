@@ -70,10 +70,6 @@ export class CameraService {
     if (facingMode === 'environment') {
       const allAvailableDevices = await this.deviceInformation.getAvailbleMediaDevices();
       const device = allAvailableDevices
-        .map(d => {
-          console.log('device: ', d);
-          return d;
-        })
         .filter(d => d.kind === 'videoinput')
         // getting the correct back camera on p20 pro/p30 pro
         .find(d => d.label === 'camera2 2, facing back');
