@@ -20,6 +20,8 @@ export class CameraPlaygroundComponent implements OnInit, OnDestroy {
   videoWidth: number;
   videoHeight: number;
 
+  windowWidth: number;
+
   model = {
     requestedStreamWidth: 1920,
     requestedStreamHeight: 1920,
@@ -33,8 +35,8 @@ export class CameraPlaygroundComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.video.nativeElement.onloadedmetadata = () => {
-      this.videoHeight = this.video.nativeElement.videoWidth;
-      this.videoWidth = this.video.nativeElement.videoHeight;
+      this.videoWidth = this.video.nativeElement.videoWidth;
+      this.videoHeight = this.video.nativeElement.videoHeight;
       this.video.nativeElement.removeAttribute('controls');
     };
   }
