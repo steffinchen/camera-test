@@ -1,33 +1,51 @@
 <div>
   <div>
     <form #cameraForm="ngForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="requestedStreamWidth">Stream Width</label>
-        <input type="number" [(ngModel)]="model.requestedStreamWidth" name="requestedStreamWidth" />
+      <div class="form-group row">
+        <label for="requestedStreamWidth" class="col-4 col-form-label">Stream Width</label>
+        <div class="col-8">
+          <input
+            type="number"
+            [(ngModel)]="model.requestedStreamWidth"
+            name="requestedStreamWidth"
+            class="form-control"
+          />
+        </div>
       </div>
-      <div class="form-group">
-        <label for="requestedStreamHeight">Stream Height</label>
-        <input type="number" [(ngModel)]="model.requestedStreamHeight" name="requestedStreamHeight" />
+      <div class="form-group row">
+        <label for="requestedStreamHeight" class="col-4 col-form-label">Stream Height</label>
+        <div class="col-8">
+          <input
+            type="number"
+            [(ngModel)]="model.requestedStreamHeight"
+            name="requestedStreamHeight"
+            class="form-control"
+          />
+        </div>
       </div>
-      <div class="form-group">
-        <label for="facingMode">Facing Mode</label>
-        <select [(ngModel)]="model.facingMode" name="facingMode">
-          <option
-            *ngFor="let enum of FacingModeEnum | keyvalue; let i = index"
-            [value]="enum.value"
-            [attr.selected]="i == 0 ? true : null"
-            >{{ enum.value }}</option
-          >
-        </select>
+      <div class="form-group row">
+        <label for="facingMode" class="col-4 col-form-label">Facing Mode</label>
+        <div class="col-8">
+          <select [(ngModel)]="model.facingMode" name="facingMode" class="form-control">
+            <option
+              *ngFor="let enum of FacingModeEnum | keyvalue; let i = index"
+              [value]="enum.value"
+              [attr.selected]="i == 0 ? true : null"
+              >{{ enum.value }}</option
+            >
+          </select>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="labelFilter">Camera device</label>
-        <select [(ngModel)]="model.labelFilter" name="labelFilter">
-          <option [attr.selected]="true" value="">-</option>
-          <option *ngFor="let camera of availableCameras" [value]="camera.deviceId">{{ camera.label }}</option>
-        </select>
+      <div class="form-group row">
+        <label for="labelFilter" class="col-4 col-form-label">Camera device</label>
+        <div class="col-8">
+          <select [(ngModel)]="model.labelFilter" name="labelFilter" class="form-control">
+            <option [attr.selected]="true" value="">-</option>
+            <option *ngFor="let camera of availableCameras" [value]="camera.deviceId">{{ camera.label }}</option>
+          </select>
+        </div>
       </div>
-      <button type="submit">Go</button>
+      <button type="submit" class="btn btn-primary float-right">Start Camera</button>
     </form>
   </div>
   <video #video webkit-playsinline autoplay playsinline muted crossorigin="anonymous"></video>
